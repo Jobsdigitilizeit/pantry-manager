@@ -1,0 +1,51 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidPantryItem(data) {
+      return data.name is string && data.name.size() > 0 && data.name.size() <= 100
+        && data.quantity is number && data.quantity >= 0
+        && data.unit is string && data.unit.size() <= 20
+        && data.category is string && data.category.size() <= 50;
+    }
+
+    function isValidRecipe(data) {
+      return data.title is string && data.title.size() > 0 && data.title.size() <= 120
+        && data.category is string && data.category.size() <= 40
+        && data.prepTimeMinutes is number && data.cookTimeMinutes is number
+        && data.servings is number && data.difficulty is string
+        && data.ingredients is list && data.steps is list;
+    }
+
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Recipes collection: public read, allow seeding/updates
+    match /recipes/{recipeId} {
+      allow read: if true;
+      allow create, update: if isValidId(recipeId) && isValidRecipe(request.resource.data);
+      allow delete: if isValidId(recipeId);
+    }
+
+    // Pantry items collection: full CRUD access for kitchen inventory
+    match /pantry_items/{itemId} {
+      allow read: if true;
+      allow create, update: if isValidId(itemId) && isValidPantryItem(request.resource.data);
+      allow delete: if isValidId(itemId);
+    }
+
+    // Settings collection
+    match /settings/{settingsId} {
+      allow read: if true;
+      allow create, update: if isValidId(settingsId);
+      allow delete: if isValidId(settingsId);
+    }
+  }
+}

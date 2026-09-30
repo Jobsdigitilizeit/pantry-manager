@@ -1,0 +1,8 @@
+{
+  "name": "Smart Pantry Manager - Android Java App & Coursework Suite",
+  "description": "Smart Pantry Manager Android application written in Java for Mobile App Development 700. Features strict leftover ingredient matching, full CRUD pantry persistence, 22 seeded recipes, SQLite database, Android Activity architecture, and complete assessment deliverables.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,148 @@
+{
+  "entities": {
+    "PantryItem": {
+      "title": "PantryItem",
+      "description": "An ingredient or food item tracked in the user's pantry inventory.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the ingredient",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "quantity": {
+          "type": "number",
+          "description": "Current quantity in stock"
+        },
+        "unit": {
+          "type": "string",
+          "description": "Measurement unit (g, kg, ml, l, tbsp, tsp, cup, pieces, can, clove, slice, pinch)",
+          "maxLength": 20
+        },
+        "category": {
+          "type": "string",
+          "description": "Ingredient category",
+          "maxLength": 50
+        },
+        "expiryDate": {
+          "type": "string",
+          "description": "Expiration date in ISO format YYYY-MM-DD",
+          "maxLength": 20
+        },
+        "createdAt": {
+          "type": "number",
+          "description": "Creation timestamp in milliseconds"
+        },
+        "updatedAt": {
+          "type": "number",
+          "description": "Last updated timestamp in milliseconds"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Optional user notes",
+          "maxLength": 500
+        }
+      },
+      "required": ["name", "quantity", "unit", "category", "createdAt", "updatedAt"]
+    },
+    "Recipe": {
+      "title": "Recipe",
+      "description": "A culinary recipe with required ingredients, steps, and metadata.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Recipe title",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "category": {
+          "type": "string",
+          "description": "Meal category (Breakfast, Lunch, Dinner, Snack, Dessert)",
+          "maxLength": 40
+        },
+        "prepTimeMinutes": {
+          "type": "number",
+          "description": "Preparation time in minutes"
+        },
+        "cookTimeMinutes": {
+          "type": "number",
+          "description": "Cooking time in minutes"
+        },
+        "servings": {
+          "type": "number",
+          "description": "Standard number of servings"
+        },
+        "difficulty": {
+          "type": "string",
+          "description": "Difficulty level (Easy, Medium, Hard)",
+          "maxLength": 20
+        },
+        "description": {
+          "type": "string",
+          "description": "Brief description of the dish",
+          "maxLength": 1000
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "URL to recipe photo",
+          "maxLength": 500
+        },
+        "ingredients": {
+          "type": "array",
+          "description": "List of required ingredients"
+        },
+        "steps": {
+          "type": "array",
+          "description": "Step-by-step preparation method"
+        }
+      },
+      "required": ["title", "category", "prepTimeMinutes", "cookTimeMinutes", "servings", "difficulty", "ingredients", "steps"]
+    },
+    "AppSettings": {
+      "title": "AppSettings",
+      "description": "User preferences and configuration settings.",
+      "type": "object",
+      "properties": {
+        "expiryWarningDays": {
+          "type": "number",
+          "description": "Days before expiration to trigger warnings"
+        },
+        "measurementSystem": {
+          "type": "string",
+          "description": "Measurement system (metric or imperial)",
+          "maxLength": 20
+        },
+        "theme": {
+          "type": "string",
+          "description": "UI theme",
+          "maxLength": 20
+        },
+        "enableAlerts": {
+          "type": "boolean",
+          "description": "Whether expiry alerts are enabled"
+        },
+        "autoDeductOnCook": {
+          "type": "boolean",
+          "description": "Whether cooking auto-deducts pantry ingredients"
+        }
+      },
+      "required": ["expiryWarningDays", "measurementSystem"]
+    }
+  },
+  "firestore": {
+    "/pantry_items/{itemId}": {
+      "schema": "PantryItem",
+      "description": "Collection of ingredients currently stored in the user's pantry."
+    },
+    "/recipes/{recipeId}": {
+      "schema": "Recipe",
+      "description": "Collection of pre-seeded and custom recipes available in the application."
+    },
+    "/settings/{settingsId}": {
+      "schema": "AppSettings",
+      "description": "User settings and preferences stored in Firestore."
+    }
+  }
+}
